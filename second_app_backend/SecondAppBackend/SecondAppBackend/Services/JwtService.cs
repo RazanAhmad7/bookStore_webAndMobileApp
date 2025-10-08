@@ -37,7 +37,7 @@ namespace SecondAppBackend.Services
         /// </summary>
         /// <param name="user">Authenticated user object</param>
         /// <returns>JWT token string for frontend storage</returns>
-        public string GenerateToken(User user)
+        public string GenerateToken(ApplicationUser user)
         {
             // Step 5.3a: Create security key from secret
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_secretKey));
@@ -47,11 +47,13 @@ namespace SecondAppBackend.Services
             // These claims will be available in the frontend without API calls
             var claims = new List<Claim>
             {
-                new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
-                new Claim(ClaimTypes.Name, user.Username),
-                new Claim(ClaimTypes.Email, user.Email),
-                new Claim("userId", user.Id.ToString()),
-                new Claim("username", user.Username)
+                new Claim(ClaimTypes.NameIdentifier, user.Id),
+                new Claim(ClaimTypes.Name, user.UserName ?? user.Email),
+                new Claim(ClaimTypes.Email, user.Email ?? ""),
+                new Claim("userId", user.Id),
+                new Claim("username", user.UserName ?? user.Email),
+                new Claim("firstName", user.FirstName ?? ""),
+                new Claim("lastName", user.LastName ?? "")
             };
 
             // Step 5.3c: Create JWT token with claims and expiration
@@ -112,17 +114,10 @@ namespace SecondAppBackend.Services
         /// </summary>
         /// <param name="token">JWT token string</param>
         /// <returns>User ID or null if invalid</returns>
-        public int? GetUserIdFromToken(string token)
+        public string? GetUserIdFromToken(string token)
         {
             var principal = ValidateToken(token);
-            var userIdClaim = principal?.FindFirst("userId")?.Value;
-            
-            if (int.TryParse(userIdClaim, out int userId))
-            {
-                return userId;
-            }
-            
-            return null;
+            return principal?.FindFirst("userId")?.Value;
         }
     }
 }

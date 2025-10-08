@@ -1,7 +1,7 @@
 /// Step 8.1: User Model - Represents authenticated user data in Flutter
 /// Data Flow: Backend JSON Response -> User.fromJson() -> Flutter State Management
 class User {
-  final int id;
+  final String id;
   final String username;
   final String email;
   final String? firstName;
@@ -21,7 +21,7 @@ class User {
   /// Data Flow: Backend API Response -> JSON Parsing -> User Object
   factory User.fromJson(Map<String, dynamic> json) {
     return User(
-      id: json['id'] ?? 0,
+      id: json['id'] ?? '',
       username: json['username'] ?? '',
       email: json['email'] ?? '',
       firstName: json['firstName'],
@@ -88,7 +88,7 @@ class User {
   /// Step 8.8: Copy Method - Create modified copies for state updates
   /// Data Flow: Existing User -> Modified Copy -> State Update
   User copyWith({
-    int? id,
+    String? id,
     String? username,
     String? email,
     String? firstName,

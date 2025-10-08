@@ -1,102 +1,153 @@
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Identity;
 using SecondAppBackend.Models;
-using SecondAppBackend.Data;
-using Microsoft.EntityFrameworkCore;
+using System.Security.Claims;
 
 namespace SecondAppBackend.Controllers
 {
+    /// <summary>
+    /// Users Controller - Manages user operations with Identity
+    /// </summary>
     [ApiController]
     [Route("api/[controller]")]
     public class UsersController : ControllerBase
     {
-        private readonly ApplicationDbContext _context;
+        private readonly UserManager<ApplicationUser> _userManager;
 
-        public UsersController(ApplicationDbContext context)
+        public UsersController(UserManager<ApplicationUser> userManager)
         {
-            _context = context;
+            _userManager = userManager;
         }
 
+        /// <summary>
+        /// Get all users (Admin only)
+        /// </summary>
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<User>>> Get()
-        {
-            return await _context.Users.ToListAsync();
-        }
-
-        [HttpGet("{id}")]
-        public async Task<ActionResult<User>> Get(int id)
-        {
-            var user = await _context.Users.FindAsync(id);
-            if (user == null)
-            {
-                return NotFound();
-            }
-            return user;
-        }
-
-        [HttpPost]
-        public async Task<IActionResult> Post(User user)
+        public async Task<ActionResult<IEnumerable<object>>> GetUsers()
         {
             try
             {
-                _context.Users.Add(user);
-                await _context.SaveChangesAsync();
-                return CreatedAtAction(nameof(Get), new { id = user.Id }, user);
-            }
-            catch (DbUpdateException)
-            {
-                // This could be due to unique constraint violations
-                return BadRequest("Username or Email already exists");
-            }
-        }
-
-        [HttpPut("{id}")]
-        public async Task<IActionResult> Put(int id, User user)
-        {
-            if (id != user.Id)
-            {
-                return BadRequest();
-            }
-
-            _context.Entry(user).State = EntityState.Modified;
-
-            try
-            {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!UserExists(id))
+                var users = _userManager.Users.Select(u => new
                 {
-                    return NotFound();
+                    id = u.Id,
+                    email = u.Email,
+                    firstName = u.FirstName,
+                    lastName = u.LastName,
+                    fullName = u.FullName,
+                    isActive = u.IsActive,
+                    createdAt = u.CreatedAt
+                }).ToList();
+
+                return Ok(users);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { message = "Internal server error", error = ex.Message });
+            }
+        }
+
+        /// <summary>
+        /// Get user by ID
+        /// </summary>
+        [HttpGet("{id}")]
+        public async Task<ActionResult<object>> GetUser(string id)
+        {
+            try
+            {
+                var user = await _userManager.FindByIdAsync(id);
+                if (user == null)
+                {
+                    return NotFound(new { message = "User not found" });
                 }
-                throw;
-            }
-            catch (DbUpdateException)
-            {
-                return BadRequest("Username or Email already exists");
-            }
 
-            return NoContent();
+                return Ok(new
+                {
+                    id = user.Id,
+                    email = user.Email,
+                    firstName = user.FirstName,
+                    lastName = user.LastName,
+                    fullName = user.FullName,
+                    isActive = user.IsActive,
+                    createdAt = user.CreatedAt
+                });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { message = "Internal server error", error = ex.Message });
+            }
         }
 
+        /// <summary>
+        /// Update user profile
+        /// </summary>
+        [HttpPut("{id}")]
+        public async Task<IActionResult> UpdateUser(string id, [FromBody] UpdateUserRequest request)
+        {
+            try
+            {
+                var user = await _userManager.FindByIdAsync(id);
+                if (user == null)
+                {
+                    return NotFound(new { message = "User not found" });
+                }
+
+                // Update user properties
+                user.FirstName = request.FirstName;
+                user.LastName = request.LastName;
+                user.UpdatedAt = DateTime.UtcNow;
+
+                var result = await _userManager.UpdateAsync(user);
+                if (!result.Succeeded)
+                {
+                    return BadRequest(new { message = "Update failed", errors = result.Errors });
+                }
+
+                return Ok(new { message = "User updated successfully" });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { message = "Internal server error", error = ex.Message });
+            }
+        }
+
+        /// <summary>
+        /// Deactivate user account
+        /// </summary>
         [HttpDelete("{id}")]
-        public async Task<IActionResult> Delete(int id)
+        public async Task<IActionResult> DeactivateUser(string id)
         {
-            var user = await _context.Users.FindAsync(id);
-            if (user == null)
+            try
             {
-                return NotFound();
+                var user = await _userManager.FindByIdAsync(id);
+                if (user == null)
+                {
+                    return NotFound(new { message = "User not found" });
+                }
+
+                user.IsActive = false;
+                user.UpdatedAt = DateTime.UtcNow;
+
+                var result = await _userManager.UpdateAsync(user);
+                if (!result.Succeeded)
+                {
+                    return BadRequest(new { message = "Deactivation failed", errors = result.Errors });
+                }
+
+                return Ok(new { message = "User deactivated successfully" });
             }
-
-            _context.Users.Remove(user);
-            await _context.SaveChangesAsync();
-
-            return NoContent();
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { message = "Internal server error", error = ex.Message });
+            }
         }
+    }
 
-        private bool UserExists(int id)
-        {
-            return _context.Users.Any(e => e.Id == id);
-        }
+    /// <summary>
+    /// Update User Request Model
+    /// </summary>
+    public class UpdateUserRequest
+    {
+        public string? FirstName { get; set; }
+        public string? LastName { get; set; }
     }
 }

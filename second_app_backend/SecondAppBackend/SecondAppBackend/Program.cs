@@ -1,5 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using SecondAppBackend.Data;
@@ -15,9 +16,30 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
+// Step 7.2a: Add ASP.NET Core Identity services
+// Data Flow: Identity → User Management → Role Management → JWT Integration
+builder.Services.AddIdentity<ApplicationUser, ApplicationRole>(options =>
+{
+    // Password settings
+    options.Password.RequireDigit = true;
+    options.Password.RequireLowercase = true;
+    options.Password.RequireUppercase = true;
+    options.Password.RequireNonAlphanumeric = false;
+    options.Password.RequiredLength = 6;
+
+    // User settings
+    options.User.RequireUniqueEmail = true;
+    options.SignIn.RequireConfirmedEmail = false;
+})
+.AddEntityFrameworkStores<ApplicationDbContext>()
+.AddDefaultTokenProviders();
+
 // Step 7.3: Register JWT Service for token operations
 // Data Flow: JWT Service → Token Generation/Validation → Authentication
 builder.Services.AddScoped<JwtService>();
+
+// Step 7.3a: Register Role Seeder Service
+builder.Services.AddScoped<RoleSeederService>();
 
 // Step 7.4: Configure JWT Authentication
 // Data Flow: HTTP Request → JWT Middleware → Token Validation → User Claims
@@ -87,14 +109,18 @@ app.UseAuthorization();
 
 app.MapControllers();
 
-// Step 7.8: Database initialization
-// Data Flow: Application Startup → Database Check → Ensure Database Created
+// Step 7.8: Database initialization and role seeding
+// Data Flow: Application Startup → Database Check → Role Seeding
 using (var scope = app.Services.CreateScope())
 {
     var context = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
-    
+    var roleSeeder = scope.ServiceProvider.GetRequiredService<RoleSeederService>();
+
     // Ensure database is created
     context.Database.EnsureCreated();
+
+    // Seed default roles
+    await roleSeeder.SeedRolesAsync();
 }
 
 app.Run();

@@ -29,6 +29,7 @@ interface AuthContextType {
   ) => Promise<boolean>;
   logout: () => void;
   clearError: () => void;
+  validateAndRefreshUser: () => Promise<boolean>;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -42,27 +43,45 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   const [isLoading, setIsLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
-  // Check for existing token on app load
+  // Check for existing token on app load and validate with backend
   useEffect(() => {
-    const token = localStorage.getItem("authToken");
-    if (token) {
-      // In a real app, you'd validate the token with the backend
-      // For now, we'll just check if it exists
-      try {
-        const tokenData = JSON.parse(atob(token.split(".")[1]));
-        if (tokenData.exp * 1000 > Date.now()) {
-          setUser({
-            email: tokenData.email || "user@example.com",
-            firstName: tokenData.firstName,
-            lastName: tokenData.lastName,
-          });
-        } else {
+    const validateToken = async () => {
+      const token = localStorage.getItem("authToken");
+      if (token) {
+        try {
+          // Validate token with backend
+          const response = await fetch(
+            "http://localhost:5070/api/auth/profile",
+            {
+              method: "GET",
+              headers: {
+                Authorization: `Bearer ${token}`,
+                "Content-Type": "application/json",
+              },
+            }
+          );
+
+          if (response.ok) {
+            const userData = await response.json();
+            setUser({
+              email: userData.email,
+              firstName: userData.firstName,
+              lastName: userData.lastName,
+            });
+          } else {
+            // Token is invalid, clear it
+            localStorage.removeItem("authToken");
+            setUser(null);
+          }
+        } catch (error) {
+          console.error("Token validation failed:", error);
           localStorage.removeItem("authToken");
+          setUser(null);
         }
-      } catch (error) {
-        localStorage.removeItem("authToken");
       }
-    }
+    };
+
+    validateToken();
   }, []);
 
   const login = async (
@@ -128,7 +147,6 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          username: email, // Use email as username
           email: email,
           password: password,
           firstName: firstName,
@@ -172,6 +190,41 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     setErrorMessage(null);
   };
 
+  // Validate current token and refresh user data
+  const validateAndRefreshUser = async (): Promise<boolean> => {
+    const token = localStorage.getItem("authToken");
+    if (!token) return false;
+
+    try {
+      const response = await fetch("http://localhost:5070/api/auth/profile", {
+        method: "GET",
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
+      });
+
+      if (response.ok) {
+        const userData = await response.json();
+        setUser({
+          email: userData.email,
+          firstName: userData.firstName,
+          lastName: userData.lastName,
+        });
+        return true;
+      } else {
+        localStorage.removeItem("authToken");
+        setUser(null);
+        return false;
+      }
+    } catch (error) {
+      console.error("Token validation failed:", error);
+      localStorage.removeItem("authToken");
+      setUser(null);
+      return false;
+    }
+  };
+
   const value: AuthContextType = {
     user,
     isLoading,
@@ -180,6 +233,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     register,
     logout,
     clearError,
+    validateAndRefreshUser,
   };
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;

@@ -49,9 +49,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
     // Step 15.4c: Get authentication provider
     final authProvider = Provider.of<AuthProvider>(context, listen: false);
 
-    // Step 15.4d: Attempt registration with user data (using email as username)
+    // Step 15.4d: Attempt registration with user data
     final success = await authProvider.register(
-      username: _emailController.text.trim(), // Use email as username
       email: _emailController.text.trim(),
       password: _passwordController.text,
       firstName: _firstNameController.text.trim().isEmpty
@@ -65,7 +64,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
     if (mounted) {
       if (success) {
         // Step 15.4e: Registration successful - Navigate to main app
-        _showSuccessSnackBar('Account created successfully! Welcome to our bookstore!');
+        _showSuccessSnackBar(
+          'Account created successfully! Welcome to our bookstore!',
+        );
         Navigator.of(context).pushReplacementNamed('/');
       } else {
         // Step 15.4f: Registration failed - Show error message
@@ -169,18 +170,19 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     /// Step 15.11: Welcome Header - User-friendly greeting with bookstore theme
                     /// Data Flow: Static Content -> UI Display
                     const Icon(
-                      Icons.menu_book, 
-                      size: 80, 
-                      color: Color(0xFFad552f) // Secondary brown
+                      Icons.menu_book,
+                      size: 80,
+                      color: Color(0xFFad552f), // Secondary brown
                     ),
                     const SizedBox(height: 20),
 
                     Text(
                       'Join Our Bookstore!',
-                      style: Theme.of(context).textTheme.headlineMedium?.copyWith(
-                        fontWeight: FontWeight.bold,
-                        color: const Color(0xFF131907), // Primary text
-                      ),
+                      style: Theme.of(context).textTheme.headlineMedium
+                          ?.copyWith(
+                            fontWeight: FontWeight.bold,
+                            color: const Color(0xFF131907), // Primary text
+                          ),
                       textAlign: TextAlign.center,
                     ),
 
@@ -188,10 +190,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
 
                     Text(
                       'Create your account to explore our collection',
-                      style: Theme.of(
-                        context,
-                      ).textTheme.bodyLarge?.copyWith(
-                        color: const Color(0xFF5a6063) // Secondary text
+                      style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                        color: const Color(0xFF5a6063), // Secondary text
                       ),
                       textAlign: TextAlign.center,
                     ),
@@ -217,13 +217,17 @@ class _RegisterScreenState extends State<RegisterScreen> {
                               border: OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(12),
                                 borderSide: const BorderSide(
-                                  color: Color(0xFFdc681b), // Primary orange/brown
+                                  color: Color(
+                                    0xFFdc681b,
+                                  ), // Primary orange/brown
                                 ),
                               ),
                               enabledBorder: OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(12),
                                 borderSide: const BorderSide(
-                                  color: Color(0xFFdc681b), // Primary orange/brown
+                                  color: Color(
+                                    0xFFdc681b,
+                                  ), // Primary orange/brown
                                 ),
                               ),
                               focusedBorder: OutlineInputBorder(
@@ -254,13 +258,17 @@ class _RegisterScreenState extends State<RegisterScreen> {
                               border: OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(12),
                                 borderSide: const BorderSide(
-                                  color: Color(0xFFdc681b), // Primary orange/brown
+                                  color: Color(
+                                    0xFFdc681b,
+                                  ), // Primary orange/brown
                                 ),
                               ),
                               enabledBorder: OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(12),
                                 borderSide: const BorderSide(
-                                  color: Color(0xFFdc681b), // Primary orange/brown
+                                  color: Color(
+                                    0xFFdc681b,
+                                  ), // Primary orange/brown
                                 ),
                               ),
                               focusedBorder: OutlineInputBorder(
@@ -394,7 +402,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
                               _agreeToTerms = value ?? false;
                             });
                           },
-                          activeColor: const Color(0xFFdc681b), // Primary orange/brown
+                          activeColor: const Color(
+                            0xFFdc681b,
+                          ), // Primary orange/brown
                         ),
                         Expanded(
                           child: GestureDetector(
@@ -406,7 +416,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
                             child: Text(
                               'I agree to the Terms and Conditions and Privacy Policy',
                               style: TextStyle(
-                                color: const Color(0xFF5a6063), // Secondary text
+                                color: const Color(
+                                  0xFF5a6063,
+                                ), // Secondary text
                                 fontSize: 14,
                               ),
                             ),
@@ -420,9 +432,13 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     /// Step 15.18: Register Button with Loading State and bookstore styling
                     /// Data Flow: Button Press -> Loading State -> Registration Process -> Result Handling
                     ElevatedButton(
-                      onPressed: authProvider.isLoading ? null : _handleRegister,
+                      onPressed: authProvider.isLoading
+                          ? null
+                          : _handleRegister,
                       style: ElevatedButton.styleFrom(
-                        backgroundColor: const Color(0xFFad552f), // Secondary brown
+                        backgroundColor: const Color(
+                          0xFFad552f,
+                        ), // Secondary brown
                         foregroundColor: Colors.white,
                         padding: const EdgeInsets.symmetric(vertical: 16),
                         shape: RoundedRectangleBorder(
@@ -489,7 +505,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
                         decoration: BoxDecoration(
                           color: const Color(0xFFdc3545).withOpacity(0.1),
                           border: Border.all(
-                            color: const Color(0xFFdc3545), // Standard error color
+                            color: const Color(
+                              0xFFdc3545,
+                            ), // Standard error color
                           ),
                           borderRadius: BorderRadius.circular(8),
                         ),
@@ -497,15 +515,17 @@ class _RegisterScreenState extends State<RegisterScreen> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             const Icon(
-                              Icons.error_outline, 
-                              color: Color(0xFFdc3545) // Standard error color
+                              Icons.error_outline,
+                              color: Color(0xFFdc3545), // Standard error color
                             ),
                             const SizedBox(width: 8),
                             Expanded(
                               child: Text(
                                 authProvider.errorMessage!,
                                 style: const TextStyle(
-                                  color: Color(0xFFdc3545), // Standard error color
+                                  color: Color(
+                                    0xFFdc3545,
+                                  ), // Standard error color
                                   fontSize: 14,
                                 ),
                               ),

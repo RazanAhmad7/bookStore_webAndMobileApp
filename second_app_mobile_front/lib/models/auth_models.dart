@@ -33,7 +33,6 @@ class LoginRequest {
 /// Step 9.3: Registration Request Model - Handles new user registration
 /// Data Flow: Registration Form -> RegisterRequest Object -> API Service -> Backend
 class RegisterRequest {
-  final String username;
   final String email;
   final String password;
   final String? firstName;
@@ -41,7 +40,6 @@ class RegisterRequest {
 
   /// Step 9.3a: Constructor - Initialize registration request with user data
   RegisterRequest({
-    required this.username,
     required this.email,
     required this.password,
     this.firstName,
@@ -52,7 +50,6 @@ class RegisterRequest {
   /// Data Flow: RegisterRequest Object -> JSON -> HTTP POST Body -> Backend /api/auth/register
   Map<String, dynamic> toJson() {
     return {
-      'username': username,
       'email': email,
       'password': password,
       'firstName': firstName,
@@ -63,13 +60,7 @@ class RegisterRequest {
   /// Step 9.3c: Validation - Comprehensive validation for registration data
   /// Data Flow: Form Input -> Validation Rules -> API Call Decision
   bool isValid() {
-    return _isValidUsername() && _isValidEmail() && _isValidPassword();
-  }
-
-  /// Step 9.3d: Username Validation - Since we use email as username, validate email format
-  /// Data Flow: Email as Username -> Email Format Check -> Validation Result
-  bool _isValidUsername() {
-    return _isValidEmail(); // Use email validation since username = email
+    return _isValidEmail() && _isValidPassword();
   }
 
   /// Step 9.3e: Email Validation - Check email format using regex
@@ -93,10 +84,6 @@ class RegisterRequest {
   List<String> getValidationErrors() {
     List<String> errors = [];
 
-    if (!_isValidUsername()) {
-      errors.add('Please enter a valid email address for username');
-    }
-
     if (!_isValidEmail()) {
       errors.add('Please enter a valid email address');
     }
@@ -111,7 +98,7 @@ class RegisterRequest {
   }
 
   @override
-  String toString() => 'RegisterRequest{username: $username, email: $email}';
+  String toString() => 'RegisterRequest{email: $email}';
 }
 
 /// Step 9.4: Authentication Response Model - Handles API responses
@@ -140,7 +127,7 @@ class AuthResponse {
 
   /// Step 9.4c: Check if authentication was successful
   /// Data Flow: Response Validation -> Success Status -> UI Navigation Decision
-  bool get isSuccess => token.isNotEmpty && user.id > 0;
+  bool get isSuccess => token.isNotEmpty && user.id.isNotEmpty;
 
   @override
   String toString() => 'AuthResponse{message: $message, userId: ${user.id}}';

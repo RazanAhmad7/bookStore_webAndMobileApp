@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import ReactDOM from "react-dom/client";
 import { AuthProvider, useAuth } from "./contexts/AuthContext";
 import Login from "./components/Login";
@@ -7,9 +7,29 @@ import Dashboard from "./components/Dashboard";
 import "./style.css";
 
 const App: React.FC = () => {
-  const { user, isLoading, errorMessage, login, register, logout, clearError } =
-    useAuth();
+  const {
+    user,
+    isLoading,
+    errorMessage,
+    login,
+    register,
+    logout,
+    clearError,
+    validateAndRefreshUser,
+  } = useAuth();
   const [currentView, setCurrentView] = useState<"login" | "register">("login");
+
+  // Validate token when window regains focus (to sync with other apps)
+  useEffect(() => {
+    const handleFocus = () => {
+      if (user) {
+        validateAndRefreshUser();
+      }
+    };
+
+    window.addEventListener("focus", handleFocus);
+    return () => window.removeEventListener("focus", handleFocus);
+  }, [user, validateAndRefreshUser]);
 
   const handleLogin = async (
     username: string,

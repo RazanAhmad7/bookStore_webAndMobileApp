@@ -77,7 +77,6 @@ class AuthProvider extends ChangeNotifier {
   /// Step 13.6: User Registration - Handle new user account creation
   /// Data Flow: Registration Form -> Validation -> API Call -> Auto Login -> Home Screen
   Future<bool> register({
-    required String username,
     required String email,
     required String password,
     String? firstName,
@@ -87,11 +86,10 @@ class AuthProvider extends ChangeNotifier {
     _clearError();
 
     try {
-      print('Attempting registration for username: $username');
+      print('Attempting registration for email: $email');
 
       // Step 13.6a: Create registration request object
       final request = RegisterRequest(
-        username: username,
         email: email,
         password: password,
         firstName: firstName,

@@ -7,6 +7,7 @@ import 'providers/auth_provider.dart';
 import 'screens/login_screen.dart';
 import 'screens/register_screen.dart';
 import 'screens/dashboard_screen.dart';
+import 'themes/bookstore_theme.dart'; // Import our custom theme
 
 /// Step 16.2: Application Entry Point - Configure providers and start app
 /// Data Flow: main() -> Provider Setup -> App Widget -> Authentication Flow
@@ -26,23 +27,11 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Authentication App',
+      title: 'Bookstore App',
 
-      /// Step 16.5: App Theme Configuration
+      /// Step 16.5: App Theme Configuration with Bookstore Theme
       /// Data Flow: Theme Setup -> Material Design -> Consistent UI
-      theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.blue),
-        useMaterial3: true,
-        appBarTheme: const AppBarTheme(centerTitle: true, elevation: 2),
-        elevatedButtonTheme: ElevatedButtonThemeData(
-          style: ElevatedButton.styleFrom(
-            elevation: 2,
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(12),
-            ),
-          ),
-        ),
-      ),
+      theme: bookstoreTheme, // Use our custom bookstore theme
 
       /// Step 16.6: Route Configuration - Define app navigation routes
       /// Data Flow: Navigation Request -> Route Lookup -> Screen Navigation

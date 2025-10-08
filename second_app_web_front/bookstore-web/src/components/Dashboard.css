@@ -1,0 +1,176 @@
+/* Dashboard Component Styles - Matching Flutter Design */
+
+.dashboard-container {
+  min-height: 100vh;
+  background-color: #fafafa;
+}
+
+.dashboard-header {
+  background-color: #dc681b;
+  color: white;
+  padding: 16px 0;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.header-content {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.dashboard-header h1 {
+  font-size: 24px;
+  font-weight: bold;
+  margin: 0;
+}
+
+.user-info {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.user-icon {
+  font-size: 18px;
+}
+
+.user-email {
+  font-size: 14px;
+  color: white;
+}
+
+.logout-button {
+  background: none;
+  border: none;
+  color: white;
+  font-size: 18px;
+  cursor: pointer;
+  padding: 8px;
+  border-radius: 4px;
+  transition: background-color 0.3s ease;
+}
+
+.logout-button:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+}
+
+.dashboard-main {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+.welcome-section {
+  margin-bottom: 24px;
+}
+
+.welcome-section h2 {
+  font-size: 24px;
+  font-weight: bold;
+  color: #131907;
+  margin: 0;
+}
+
+.info-card {
+  background: white;
+  border-radius: 12px;
+  padding: 24px;
+  margin-bottom: 32px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  border: 1px solid #e0e0e0;
+}
+
+.info-card h3 {
+  font-size: 18px;
+  font-weight: 600;
+  color: #131907;
+  margin: 0 0 12px 0;
+}
+
+.info-card p {
+  font-size: 16px;
+  color: #5a6063;
+  margin: 0;
+  line-height: 1.5;
+}
+
+.features-section {
+  margin-bottom: 32px;
+}
+
+.features-section h3 {
+  font-size: 18px;
+  font-weight: 600;
+  color: #131907;
+  margin: 0 0 16px 0;
+}
+
+.features-list {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.feature-item {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 16px;
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  border: 1px solid #e0e0e0;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.feature-item:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.feature-icon {
+  font-size: 24px;
+  color: #ad552f;
+}
+
+.feature-content h4 {
+  font-size: 16px;
+  font-weight: 600;
+  color: #131907;
+  margin: 0 0 4px 0;
+}
+
+.feature-content p {
+  font-size: 14px;
+  color: #5a6063;
+  margin: 0;
+  line-height: 1.4;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .header-content {
+    flex-direction: column;
+    gap: 12px;
+    text-align: center;
+  }
+
+  .user-info {
+    justify-content: center;
+  }
+
+  .dashboard-main {
+    padding: 16px;
+  }
+
+  .features-list {
+    gap: 12px;
+  }
+
+  .feature-item {
+    padding: 12px;
+  }
+}

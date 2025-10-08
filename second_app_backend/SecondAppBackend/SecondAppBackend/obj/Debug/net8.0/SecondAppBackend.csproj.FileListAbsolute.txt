@@ -200,3 +200,4 @@ C:\Flutter\secondApp_front_back\second_app_backend\SecondAppBackend\SecondAppBac
 C:\Flutter\secondApp_front_back\second_app_backend\SecondAppBackend\SecondAppBackend\obj\Debug\net8.0\ref\SecondAppBackend.dll
 C:\Flutter\secondApp_front_back\second_app_backend\SecondAppBackend\SecondAppBackend\bin\Debug\net8.0\BCrypt.Net-Next.dll
 C:\Flutter\secondApp_front_back\second_app_backend\SecondAppBackend\SecondAppBackend\bin\Debug\net8.0\Microsoft.AspNetCore.Authentication.JwtBearer.dll
+C:\Flutter\secondApp_front_back\second_app_backend\SecondAppBackend\SecondAppBackend\obj\Debug\net8.0\SecondAppBackend.sourcelink.json

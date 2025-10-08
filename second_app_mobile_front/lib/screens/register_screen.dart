@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../providers/auth_provider.dart';
 
-/// Step 15.1: Register Screen - New user account creation interface
+/// Step 15.1: Register Screen - New user account creation interface with bookstore theme
 /// Data Flow: User Input -> Form Validation -> AuthProvider.register() -> Auto Login -> Navigation
 class RegisterScreen extends StatefulWidget {
   const RegisterScreen({super.key});
@@ -65,7 +65,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
     if (mounted) {
       if (success) {
         // Step 15.4e: Registration successful - Navigate to main app
-        _showSuccessSnackBar('Account created successfully! Welcome!');
+        _showSuccessSnackBar('Account created successfully! Welcome to our bookstore!');
         Navigator.of(context).pushReplacementNamed('/');
       } else {
         // Step 15.4f: Registration failed - Show error message
@@ -80,7 +80,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
         content: Text(message),
-        backgroundColor: Colors.green,
+        backgroundColor: const Color(0xFF28a745), // Standard success color
         duration: const Duration(seconds: 3),
         action: SnackBarAction(
           label: 'OK',
@@ -99,7 +99,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
         content: Text(message),
-        backgroundColor: Colors.red,
+        backgroundColor: const Color(0xFFdc3545), // Standard error color
         duration: const Duration(seconds: 4),
         action: SnackBarAction(
           label: 'OK',
@@ -144,277 +144,380 @@ class _RegisterScreenState extends State<RegisterScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      /// Step 15.10: App Bar - Registration screen header
+      /// Step 15.10: App Bar - Registration screen header with bookstore theme
       appBar: AppBar(
-        title: const Text('Create Account'),
-        backgroundColor: Theme.of(context).colorScheme.primary,
+        title: const Text('Bookstore Registration'),
+        backgroundColor: const Color(0xFFdc681b), // Primary orange/brown
         foregroundColor: Colors.white,
         centerTitle: true,
       ),
 
       body: Consumer<AuthProvider>(
         builder: (context, authProvider, child) {
-          return SingleChildScrollView(
-            padding: const EdgeInsets.all(16.0),
-            child: Form(
-              key: _formKey,
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: [
-                  /// Step 15.11: Welcome Header - User-friendly greeting
-                  /// Data Flow: Static Content -> UI Display
-                  const Icon(Icons.person_add, size: 80, color: Colors.green),
-                  const SizedBox(height: 20),
-
-                  Text(
-                    'Join Us Today!',
-                    style: Theme.of(context).textTheme.headlineMedium?.copyWith(
-                      fontWeight: FontWeight.bold,
-                      color: Colors.green[800],
+          return Container(
+            // Background with subtle texture
+            decoration: const BoxDecoration(
+              color: Color(0xFFfafafa), // Light background
+            ),
+            child: SingleChildScrollView(
+              padding: const EdgeInsets.all(16.0),
+              child: Form(
+                key: _formKey,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    /// Step 15.11: Welcome Header - User-friendly greeting with bookstore theme
+                    /// Data Flow: Static Content -> UI Display
+                    const Icon(
+                      Icons.menu_book, 
+                      size: 80, 
+                      color: Color(0xFFad552f) // Secondary brown
                     ),
-                    textAlign: TextAlign.center,
-                  ),
+                    const SizedBox(height: 20),
 
-                  const SizedBox(height: 8),
+                    Text(
+                      'Join Our Bookstore!',
+                      style: Theme.of(context).textTheme.headlineMedium?.copyWith(
+                        fontWeight: FontWeight.bold,
+                        color: const Color(0xFF131907), // Primary text
+                      ),
+                      textAlign: TextAlign.center,
+                    ),
 
-                  Text(
-                    'Create your account to get started',
-                    style: Theme.of(
-                      context,
-                    ).textTheme.bodyLarge?.copyWith(color: Colors.grey[600]),
-                    textAlign: TextAlign.center,
-                  ),
+                    const SizedBox(height: 8),
 
-                  const SizedBox(height: 30),
+                    Text(
+                      'Create your account to explore our collection',
+                      style: Theme.of(
+                        context,
+                      ).textTheme.bodyLarge?.copyWith(
+                        color: const Color(0xFF5a6063) // Secondary text
+                      ),
+                      textAlign: TextAlign.center,
+                    ),
 
-                  /// Step 15.12: Personal Information Section
-                  /// Data Flow: User Input -> Validation -> Controller Storage
+                    const SizedBox(height: 30),
 
-                  // First Name and Last Name Row
-                  Row(
-                    children: [
-                      Expanded(
-                        child: TextFormField(
-                          controller: _firstNameController,
-                          decoration: InputDecoration(
-                            labelText: 'First Name (Optional)',
-                            hintText: 'Enter first name',
-                            prefixIcon: const Icon(Icons.person_outline),
-                            border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(12),
+                    /// Step 15.12: Personal Information Section with bookstore styling
+                    /// Data Flow: User Input -> Validation -> Controller Storage
+
+                    // First Name and Last Name Row
+                    Row(
+                      children: [
+                        Expanded(
+                          child: TextFormField(
+                            controller: _firstNameController,
+                            decoration: InputDecoration(
+                              labelText: 'First Name (Optional)',
+                              hintText: 'Enter first name',
+                              prefixIcon: const Icon(
+                                Icons.person_outline,
+                                color: Color(0xFFad552f), // Secondary brown
+                              ),
+                              border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(12),
+                                borderSide: const BorderSide(
+                                  color: Color(0xFFdc681b), // Primary orange/brown
+                                ),
+                              ),
+                              enabledBorder: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(12),
+                                borderSide: const BorderSide(
+                                  color: Color(0xFFdc681b), // Primary orange/brown
+                                ),
+                              ),
+                              focusedBorder: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(12),
+                                borderSide: const BorderSide(
+                                  color: Color(0xFFad552f), // Secondary brown
+                                  width: 2.0,
+                                ),
+                              ),
+                              filled: true,
+                              fillColor: Colors.white,
                             ),
-                            filled: true,
-                            fillColor: Colors.grey[50],
+                            textInputAction: TextInputAction.next,
+                            textCapitalization: TextCapitalization.words,
                           ),
-                          textInputAction: TextInputAction.next,
-                          textCapitalization: TextCapitalization.words,
                         ),
-                      ),
-                      const SizedBox(width: 12),
-                      Expanded(
-                        child: TextFormField(
-                          controller: _lastNameController,
-                          decoration: InputDecoration(
-                            labelText: 'Last Name (Optional)',
-                            hintText: 'Enter last name',
-                            prefixIcon: const Icon(Icons.person_outline),
-                            border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(12),
+                        const SizedBox(width: 12),
+                        Expanded(
+                          child: TextFormField(
+                            controller: _lastNameController,
+                            decoration: InputDecoration(
+                              labelText: 'Last Name (Optional)',
+                              hintText: 'Enter last name',
+                              prefixIcon: const Icon(
+                                Icons.person_outline,
+                                color: Color(0xFFad552f), // Secondary brown
+                              ),
+                              border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(12),
+                                borderSide: const BorderSide(
+                                  color: Color(0xFFdc681b), // Primary orange/brown
+                                ),
+                              ),
+                              enabledBorder: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(12),
+                                borderSide: const BorderSide(
+                                  color: Color(0xFFdc681b), // Primary orange/brown
+                                ),
+                              ),
+                              focusedBorder: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(12),
+                                borderSide: const BorderSide(
+                                  color: Color(0xFFad552f), // Secondary brown
+                                  width: 2.0,
+                                ),
+                              ),
+                              filled: true,
+                              fillColor: Colors.white,
                             ),
-                            filled: true,
-                            fillColor: Colors.grey[50],
+                            textInputAction: TextInputAction.next,
+                            textCapitalization: TextCapitalization.words,
                           ),
-                          textInputAction: TextInputAction.next,
-                          textCapitalization: TextCapitalization.words,
                         ),
-                      ),
-                    ],
-                  ),
-
-                  const SizedBox(height: 16),
-
-                  /// Step 15.14: Email Input Field
-                  /// Data Flow: User Input -> Validation -> Controller Storage
-                  TextFormField(
-                    controller: _emailController,
-                    decoration: InputDecoration(
-                      labelText: 'Email Address *',
-                      hintText: 'Enter your email address',
-                      prefixIcon: const Icon(Icons.email),
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(12),
-                      ),
-                      filled: true,
-                      fillColor: Colors.grey[50],
+                      ],
                     ),
-                    keyboardType: TextInputType.emailAddress,
-                    textInputAction: TextInputAction.next,
-                    validator: _validateEmail,
-                  ),
 
-                  const SizedBox(height: 16),
+                    const SizedBox(height: 16),
 
-                  /// Step 15.15: Password Input Field
-                  /// Data Flow: User Input -> Obscured Display -> Validation -> Controller Storage
-                  TextFormField(
-                    controller: _passwordController,
-                    decoration: InputDecoration(
-                      labelText: 'Password *',
-                      hintText: 'Create a strong password',
-                      prefixIcon: const Icon(Icons.lock),
-                      suffixIcon: IconButton(
-                        icon: Icon(
-                          _obscurePassword
-                              ? Icons.visibility
-                              : Icons.visibility_off,
+                    /// Step 15.14: Email Input Field with bookstore styling
+                    /// Data Flow: User Input -> Validation -> Controller Storage
+                    TextFormField(
+                      controller: _emailController,
+                      decoration: InputDecoration(
+                        labelText: 'Email Address *',
+                        hintText: 'Enter your email address',
+                        prefixIcon: const Icon(
+                          Icons.email,
+                          color: Color(0xFFad552f), // Secondary brown
                         ),
-                        onPressed: () {
-                          setState(() {
-                            _obscurePassword = !_obscurePassword;
-                          });
-                        },
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(12),
+                          borderSide: const BorderSide(
+                            color: Color(0xFFdc681b), // Primary orange/brown
+                          ),
+                        ),
+                        enabledBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(12),
+                          borderSide: const BorderSide(
+                            color: Color(0xFFdc681b), // Primary orange/brown
+                          ),
+                        ),
+                        focusedBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(12),
+                          borderSide: const BorderSide(
+                            color: Color(0xFFad552f), // Secondary brown
+                            width: 2.0,
+                          ),
+                        ),
+                        filled: true,
+                        fillColor: Colors.white,
                       ),
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(12),
-                      ),
-                      filled: true,
-                      fillColor: Colors.grey[50],
-                      helperText:
-                          'At least 8 characters with uppercase, lowercase, and number',
-                      helperMaxLines: 2,
+                      keyboardType: TextInputType.emailAddress,
+                      textInputAction: TextInputAction.next,
+                      validator: _validateEmail,
                     ),
-                    obscureText: _obscurePassword,
-                    textInputAction: TextInputAction.done,
-                    onFieldSubmitted: (_) => _handleRegister(),
-                    validator: _validatePassword,
-                  ),
 
-                  const SizedBox(height: 16),
+                    const SizedBox(height: 16),
 
-                  /// Step 15.17: Terms and Conditions Checkbox
-                  /// Data Flow: User Agreement -> State Update -> Registration Validation
-                  Row(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Checkbox(
-                        value: _agreeToTerms,
-                        onChanged: (value) {
-                          setState(() {
-                            _agreeToTerms = value ?? false;
-                          });
-                        },
-                      ),
-                      Expanded(
-                        child: GestureDetector(
-                          onTap: () {
+                    /// Step 15.15: Password Input Field with bookstore styling
+                    /// Data Flow: User Input -> Obscured Display -> Validation -> Controller Storage
+                    TextFormField(
+                      controller: _passwordController,
+                      decoration: InputDecoration(
+                        labelText: 'Password *',
+                        hintText: 'Create a strong password',
+                        prefixIcon: const Icon(
+                          Icons.lock,
+                          color: Color(0xFFad552f), // Secondary brown
+                        ),
+                        suffixIcon: IconButton(
+                          icon: Icon(
+                            _obscurePassword
+                                ? Icons.visibility
+                                : Icons.visibility_off,
+                            color: const Color(0xFFad552f), // Secondary brown
+                          ),
+                          onPressed: () {
                             setState(() {
-                              _agreeToTerms = !_agreeToTerms;
+                              _obscurePassword = !_obscurePassword;
                             });
                           },
-                          child: Text(
-                            'I agree to the Terms and Conditions and Privacy Policy',
-                            style: TextStyle(
-                              color: Colors.grey[700],
-                              fontSize: 14,
-                            ),
+                        ),
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(12),
+                          borderSide: const BorderSide(
+                            color: Color(0xFFdc681b), // Primary orange/brown
                           ),
                         ),
+                        enabledBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(12),
+                          borderSide: const BorderSide(
+                            color: Color(0xFFdc681b), // Primary orange/brown
+                          ),
+                        ),
+                        focusedBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(12),
+                          borderSide: const BorderSide(
+                            color: Color(0xFFad552f), // Secondary brown
+                            width: 2.0,
+                          ),
+                        ),
+                        filled: true,
+                        fillColor: Colors.white,
+                        helperText:
+                            'At least 8 characters with uppercase, lowercase, and number',
+                        helperMaxLines: 2,
+                        helperStyle: const TextStyle(
+                          color: Color(0xFF5a6063), // Secondary text
+                        ),
                       ),
-                    ],
-                  ),
-
-                  const SizedBox(height: 24),
-
-                  /// Step 15.18: Register Button with Loading State
-                  /// Data Flow: Button Press -> Loading State -> Registration Process -> Result Handling
-                  ElevatedButton(
-                    onPressed: authProvider.isLoading ? null : _handleRegister,
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.green,
-                      foregroundColor: Colors.white,
-                      padding: const EdgeInsets.symmetric(vertical: 16),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(12),
-                      ),
-                      elevation: 2,
+                      obscureText: _obscurePassword,
+                      textInputAction: TextInputAction.done,
+                      onFieldSubmitted: (_) => _handleRegister(),
+                      validator: _validatePassword,
                     ),
-                    child: authProvider.isLoading
-                        ? const SizedBox(
-                            height: 20,
-                            width: 20,
-                            child: CircularProgressIndicator(
-                              strokeWidth: 2,
-                              valueColor: AlwaysStoppedAnimation<Color>(
-                                Colors.white,
-                              ),
-                            ),
-                          )
-                        : const Text(
-                            'Create Account',
-                            style: TextStyle(
-                              fontSize: 16,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                  ),
 
-                  const SizedBox(height: 16),
-
-                  /// Step 15.19: Login Link - Navigate back to login
-                  /// Data Flow: User Tap -> Navigation -> Login Screen
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Text(
-                        'Already have an account? ',
-                        style: TextStyle(color: Colors.grey[600]),
-                      ),
-                      TextButton(
-                        onPressed: authProvider.isLoading
-                            ? null
-                            : () {
-                                Navigator.of(context).pop();
-                              },
-                        child: const Text(
-                          'Sign In',
-                          style: TextStyle(fontWeight: FontWeight.bold),
-                        ),
-                      ),
-                    ],
-                  ),
-
-                  /// Step 15.20: Error Message Display
-                  /// Data Flow: AuthProvider Error -> Conditional Display -> User Notification
-                  if (authProvider.errorMessage != null) ...[
                     const SizedBox(height: 16),
-                    Container(
-                      padding: const EdgeInsets.all(12),
-                      decoration: BoxDecoration(
-                        color: Colors.red[50],
-                        border: Border.all(color: Colors.red[200]!),
-                        borderRadius: BorderRadius.circular(8),
-                      ),
-                      child: Row(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Icon(Icons.error_outline, color: Colors.red[700]),
-                          const SizedBox(width: 8),
-                          Expanded(
+
+                    /// Step 15.17: Terms and Conditions Checkbox with bookstore styling
+                    /// Data Flow: User Agreement -> State Update -> Registration Validation
+                    Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Checkbox(
+                          value: _agreeToTerms,
+                          onChanged: (value) {
+                            setState(() {
+                              _agreeToTerms = value ?? false;
+                            });
+                          },
+                          activeColor: const Color(0xFFdc681b), // Primary orange/brown
+                        ),
+                        Expanded(
+                          child: GestureDetector(
+                            onTap: () {
+                              setState(() {
+                                _agreeToTerms = !_agreeToTerms;
+                              });
+                            },
                             child: Text(
-                              authProvider.errorMessage!,
+                              'I agree to the Terms and Conditions and Privacy Policy',
                               style: TextStyle(
-                                color: Colors.red[700],
+                                color: const Color(0xFF5a6063), // Secondary text
                                 fontSize: 14,
                               ),
                             ),
                           ),
-                        ],
-                      ),
+                        ),
+                      ],
                     ),
-                  ],
 
-                  const SizedBox(height: 20),
-                ],
+                    const SizedBox(height: 24),
+
+                    /// Step 15.18: Register Button with Loading State and bookstore styling
+                    /// Data Flow: Button Press -> Loading State -> Registration Process -> Result Handling
+                    ElevatedButton(
+                      onPressed: authProvider.isLoading ? null : _handleRegister,
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: const Color(0xFFad552f), // Secondary brown
+                        foregroundColor: Colors.white,
+                        padding: const EdgeInsets.symmetric(vertical: 16),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                        elevation: 4,
+                      ),
+                      child: authProvider.isLoading
+                          ? const SizedBox(
+                              height: 20,
+                              width: 20,
+                              child: CircularProgressIndicator(
+                                strokeWidth: 2,
+                                valueColor: AlwaysStoppedAnimation<Color>(
+                                  Colors.white,
+                                ),
+                              ),
+                            )
+                          : const Text(
+                              'Create Account',
+                              style: TextStyle(
+                                fontSize: 16,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                    ),
+
+                    const SizedBox(height: 16),
+
+                    /// Step 15.19: Login Link - Navigate back to login with bookstore styling
+                    /// Data Flow: User Tap -> Navigation -> Login Screen
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text(
+                          'Already have an account? ',
+                          style: TextStyle(
+                            color: const Color(0xFF5a6063), // Secondary text
+                          ),
+                        ),
+                        TextButton(
+                          onPressed: authProvider.isLoading
+                              ? null
+                              : () {
+                                  Navigator.of(context).pop();
+                                },
+                          child: const Text(
+                            'Sign In',
+                            style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              color: Color(0xFFdc681b), // Primary orange/brown
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+
+                    /// Step 15.20: Error Message Display with bookstore styling
+                    /// Data Flow: AuthProvider Error -> Conditional Display -> User Notification
+                    if (authProvider.errorMessage != null) ...[
+                      const SizedBox(height: 16),
+                      Container(
+                        padding: const EdgeInsets.all(12),
+                        decoration: BoxDecoration(
+                          color: const Color(0xFFdc3545).withOpacity(0.1),
+                          border: Border.all(
+                            color: const Color(0xFFdc3545), // Standard error color
+                          ),
+                          borderRadius: BorderRadius.circular(8),
+                        ),
+                        child: Row(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            const Icon(
+                              Icons.error_outline, 
+                              color: Color(0xFFdc3545) // Standard error color
+                            ),
+                            const SizedBox(width: 8),
+                            Expanded(
+                              child: Text(
+                                authProvider.errorMessage!,
+                                style: const TextStyle(
+                                  color: Color(0xFFdc3545), // Standard error color
+                                  fontSize: 14,
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
+
+                    const SizedBox(height: 20),
+                  ],
+                ),
               ),
             ),
           );

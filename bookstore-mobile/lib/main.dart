@@ -7,6 +7,7 @@ import 'providers/auth_provider.dart';
 import 'screens/login_screen.dart';
 import 'screens/register_screen.dart';
 import 'screens/dashboard_screen.dart';
+import 'screens/home_screen.dart';
 import 'themes/bookstore_theme.dart'; // Import our custom theme
 
 /// Step 16.2: Application Entry Point - Configure providers and start app
@@ -27,13 +28,11 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      
       title: 'Bookstore App',
 
       /// Step 16.5: App Theme Configuration with Bookstore Theme
       /// Data Flow: Theme Setup -> Material Design -> Consistent UI
       theme: bookstoreTheme, // Use our custom bookstore theme
-
       /// Step 16.6: Route Configuration - Define app navigation routes
       /// Data Flow: Navigation Request -> Route Lookup -> Screen Navigation
       routes: {
@@ -94,15 +93,9 @@ class _AuthWrapperState extends State<AuthWrapper> {
           );
         }
 
-        /// Step 16.9c: Route to appropriate screen based on authentication
-        /// Data Flow: Auth Status -> Screen Decision -> Navigation
-        if (authProvider.isAuthenticated) {
-          // User is logged in, show main dashboard
-          return const DashboardScreen();
-        } else {
-          // User is not logged in, show login screen
-          return const LoginScreen();
-        }
+        /// Step 16.9c: Show home screen (public access)
+        /// Data Flow: App Launch -> Home Display -> User Navigation
+        return const HomeScreen();
       },
     );
   }

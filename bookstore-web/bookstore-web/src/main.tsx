@@ -4,6 +4,7 @@ import { AuthProvider, useAuth } from "./contexts/AuthContext";
 import Login from "./components/Login";
 import Register from "./components/Register";
 import Dashboard from "./components/Dashboard";
+import Home from "./components/Home";
 import "./style.css";
 
 const App: React.FC = () => {
@@ -80,31 +81,8 @@ const App: React.FC = () => {
     );
   }
 
-  // Show dashboard if user is logged in
-  if (user) {
-    return <Dashboard user={user} onLogout={handleLogout} />;
-  }
-
-  // Show login or register form
-  return (
-    <div className="app">
-      {currentView === "login" ? (
-        <Login
-          onLogin={handleLogin}
-          onNavigateToRegister={navigateToRegister}
-          isLoading={isLoading}
-          errorMessage={errorMessage}
-        />
-      ) : (
-        <Register
-          onRegister={handleRegister}
-          onNavigateToLogin={navigateToLogin}
-          isLoading={isLoading}
-          errorMessage={errorMessage}
-        />
-      )}
-    </div>
-  );
+  // Show home page (public access)
+  return <Home />;
 };
 
 // Render the React application
